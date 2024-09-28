@@ -310,7 +310,8 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
 
                           log(personalDetails.toString());
 
-                          var response = await healthProfile(personalDetails, widget.email, widget.password);
+                          var response = await healthProfile(
+                              personalDetails, widget.email, widget.password);
 
                           ref
                               .read(personalDetailsProvider.notifier)

@@ -15,14 +15,6 @@ class _MarketplaceScreen extends State<MarketplaceScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Container(
-          //   decoration: const BoxDecoration(
-          //     image: DecorationImage(
-          //       image: AssetImage('assets/logos/mivro.png'),
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
           Center(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
@@ -30,7 +22,7 @@ class _MarketplaceScreen extends State<MarketplaceScreen> {
                 alignment: Alignment.center,
                 color: Colors.black.withOpacity(
                   0.2,
-                ), // Optional: for better visibility of the blur effect
+                ),
                 child: const Text(
                   'Feature Under Development',
                   style: TextStyle(

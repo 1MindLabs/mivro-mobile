@@ -27,22 +27,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           _passwordController.text.isNotEmpty) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _emailController.text);
-          prefs.setString('password', _passwordController.text);
+        prefs.setString('password', _passwordController.text);
 
-         var response = await signin(_emailController.text, _passwordController.text);
-          if(response){
-            prefs.setBool('isLoggedIn', true);
+        var response =
+            await signin(_emailController.text, _passwordController.text);
+        if (response) {
+          prefs.setBool('isLoggedIn', true);
           prefs.setBool('isUser', true);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Login successfull'),
+              content: Text('Login Successfull'),
               backgroundColor: Colors.green,
             ),
           );
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomePage()));
-          }
-        else {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Invalid Credentials'),
@@ -157,7 +157,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, color: Colors.blue),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
                           )),
                     ),
                     const Gap(25),

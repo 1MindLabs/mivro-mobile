@@ -4,23 +4,24 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:mivro/presentation/auth/model/personal_details.dart';
 
-Future<Map<String, dynamic>> healthProfile(PersonalDetails personalDetails, String email, String password) async {
+Future<Map<String, dynamic>> healthProfile(
+    PersonalDetails personalDetails, String email, String password) async {
   try {
     const String url = 'http://10.1.6.186:5000/api/v1/user/health-profile';
 
     var body = {
-        'age': personalDetails.age,
-        'gender': personalDetails.gender,
-        'height': personalDetails.height,
-        'weight': personalDetails.weight,
-        'dietary_preferences': personalDetails.dietaryPreference,
-        'medical_conditions': personalDetails.medicalCondition,
-        'allergys': personalDetails.allergy,
-      };
+      'age': personalDetails.age,
+      'gender': personalDetails.gender,
+      'height': personalDetails.height,
+      'weight': personalDetails.weight,
+      'dietary_preferences': personalDetails.dietaryPreference,
+      'medical_conditions': personalDetails.medicalCondition,
+      'allergys': personalDetails.allergy,
+    };
 
     final response = await http.post(
       Uri.parse(url),
-      headers:  <String, String>{
+      headers: <String, String>{
         'Mivro-Email': email,
         'Mivro-Password': password,
         'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefs.setBool('isUser', true);
 
             SnackBar snackBar = const SnackBar(
-              content: Text('Sign up successful'),
+              content: Text('Sign Up Successful'),
               backgroundColor: Colors.green,
             );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -49,7 +49,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>  DetailsScreen(email:  _emailController.text, password: _passwordController.text,),
+                builder: (context) => DetailsScreen(
+                  email: _emailController.text,
+                  password: _passwordController.text,
+                ),
               ),
             );
           } else {

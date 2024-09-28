@@ -29,13 +29,8 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
         'Content-Type': 'application/json',
       };
 
-      final response = await http.post(
-        Uri.parse(url),
-        body: json.encode(body),
-        headers: header
-      );
-
-      log('got response');
+      final response = await http.post(Uri.parse(url),
+          body: json.encode(body), headers: header);
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -61,7 +56,6 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
 
   Future<Message?> getResponseHavingImage(String prompt, File file) async {
     try {
-      log('in get response with image');
       _isLoading = true;
       state = [...state];
       String url = 'http://10.1.6.186:5000/api/v1/ai/savora';

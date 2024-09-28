@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,8 +139,6 @@ class _BarcodeScannerListViewState
                   Row(
                     children: [
                       const Spacer(),
-                      
-                      
                       IconButton(
                         icon: const Icon(Icons.close),
                         iconSize: 20,
@@ -152,7 +149,6 @@ class _BarcodeScannerListViewState
                       ),
                     ],
                   ),
-                  
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -160,9 +156,7 @@ class _BarcodeScannerListViewState
                       RichText(
                         text: TextSpan(
                           text: 'Powered by ',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black), // default text style
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'OpenFoodFacts',
@@ -250,14 +244,14 @@ class _BarcodeScannerListViewState
                       SizedBox(height: 20), // Space between sections
 
                       // Warning Section
-                      Text(
+                      const Text(
                         'Warning\n',
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
+                      const Text(
                         'The information provided is for general guidance only and should not be considered medical advice. Always seek professional advice for important health decisions.',
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
@@ -265,11 +259,11 @@ class _BarcodeScannerListViewState
                       SizedBox(height: 20), // Space between sections
 
                       // Footer
-                      Text(
+                      const Text(
                         '© 2024 Areeb Ahmed, Shivansh Karan, Shashwat Kumar, Rishi Chirchi. All rights reserved.',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
-                      Text(
+                      const Text(
                         'License - Documentation',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),

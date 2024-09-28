@@ -37,39 +37,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Profile info section
         GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>  ProfileDetailsScreen(personalDetails: profileDetails['health_profile']??{}),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileDetailsScreen(
+                    personalDetails: profileDetails['health_profile'] ?? {}),
+              ),
+            );
           },
           child: Container(
             color: Colors.white,
             padding: EdgeInsets.all(30),
             child: Row(
               children: [
-                 CircleAvatar(
+                CircleAvatar(
                   radius: 40,
                   backgroundImage: NetworkImage(
-                      profileDetails['account_info']['photo_url']??''), // Replace with actual profile image
+                      profileDetails['account_info']['photo_url'] ?? ''),
                 ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
-                      profileDetails['account_info']['display_name']??'',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    Text(
+                      profileDetails['account_info']['display_name'] ?? '',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       email,
@@ -82,8 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         Divider(),
-
-        // Menu options
         _buildMenuItem(context, 'Account Settings'),
         _buildMenuItem(context, 'Privacy and Security'),
         _buildMenuItem(context, 'Activity and Records'),
@@ -91,8 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _buildMenuItem(context, 'Support and Feedback'),
         _buildMenuItem(context, 'Legal'),
         _buildMenuItem(context, 'Advanced'),
-
-        // Logout button
         Spacer(),
         Center(
           child: Padding(
@@ -106,7 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
-                // Logout logic goes here
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -130,10 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListTile(
       title: Text(title),
       trailing: Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        
-        
-      },
+      onTap: () {},
     );
   }
 }

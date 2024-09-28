@@ -8,9 +8,9 @@ Future<bool> createAccount(String email, String password) async {
     const String url = 'http://10.1.6.186:5000/api/v1/auth/signup';
 
     var body = {
-        'email': email,
-        'password': password,
-      };
+      'email': email,
+      'password': password,
+    };
 
     final response = await http.post(
       Uri.parse(url),

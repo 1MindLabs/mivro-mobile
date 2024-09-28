@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDetailsNotifier extends StateNotifier<Map<String, dynamic>> {

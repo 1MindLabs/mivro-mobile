@@ -9,6 +9,7 @@ class PersonalDetailsNotifier extends StateNotifier<PersonalDetails?> {
   }
 }
 
-final personalDetailsProvider = StateNotifierProvider<PersonalDetailsNotifier, PersonalDetails?>((ref) {
+final personalDetailsProvider =
+    StateNotifierProvider<PersonalDetailsNotifier, PersonalDetails?>((ref) {
   return PersonalDetailsNotifier();
 });

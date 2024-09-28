@@ -8,5 +8,13 @@ class PersonalDetails {
   final String dietaryPreference;
   final String medicalCondition;
 
-  PersonalDetails({required this.age, required this.gender, required this.height, required this.weight, required this.bmi, required this.allergy, required this.dietaryPreference, required this.medicalCondition});
+  PersonalDetails(
+      {required this.age,
+      required this.gender,
+      required this.height,
+      required this.weight,
+      required this.bmi,
+      required this.allergy,
+      required this.dietaryPreference,
+      required this.medicalCondition});
 }

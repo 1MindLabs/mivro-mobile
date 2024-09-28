@@ -24,7 +24,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                 alignment: Alignment.center,
                 color: Colors.black.withOpacity(
                   0.2,
-                ), // Optional: for better visibility of the blur effect
+                ),
                 child: const Text(
                   'Feature Under Development',
                   style: TextStyle(
