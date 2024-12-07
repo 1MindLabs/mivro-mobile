@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> loadProfile(String email, String password) async {
   try {
-    const String url = 'http://10.1.6.186:5000/api/v1/user/load-profile';
+    const String url = 'http://192.168.160.94:5000/api/v1/user/load-profile';
 
     final response = await http.post(
       Uri.parse(url),

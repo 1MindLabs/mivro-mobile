@@ -52,19 +52,63 @@ class _BarcodeScannerListViewState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/food-icons/$imageString.png',
-              width: 30,
-              height: 30,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
+            if (imageString == 'milk-chocolate')
+              Image.asset(
+                'assets/food-icons/chocolate.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            
+            
+            if (imageString == 'corn-syrup')
+              Image.asset(
+                'assets/food-icons/corn.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'peanuts')
+              Image.asset(
+                'assets/food-icons/nuts.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            
+            if(imageString != 'peanuts' && imageString != 'corn-syrup' && imageString != 'milk-chocolate')
+              Image.asset('assets/food-icons/$imageString.png', width: 30, height: 30,
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
                   height: 30,
                 );
-              },
-            ),
+              }),
+            
+            
             const SizedBox(width: 8),
             Text(name, style: const TextStyle(fontSize: 14)),
             const Spacer(),
@@ -84,19 +128,58 @@ class _BarcodeScannerListViewState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/food-icons/$imageString.png',
-              width: 30,
-              height: 30,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
+            if (imageString == 'sugars')
+              Image.asset(
+                'assets/food-icons/sugar.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'carbohydrates')
+              Image.asset(
+                'assets/food-icons/carbohydrate.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'proteins')
+              Image.asset(
+                'assets/food-icons/protein.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if(imageString != 'proteins' && imageString != 'carbohydrates' && imageString != 'sugars')
+              Image.asset('assets/food-icons/$imageString.png', width: 30, height: 30,
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
                   height: 30,
                 );
-              },
-            ),
+              }),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,7 +776,7 @@ class _BarcodeScannerListViewState
       );
     }
 
-    Widget _buildBarcodesListView() {
+    Widget buildBarcodesListView() {
       return StreamBuilder<BarcodeCapture>(
         stream: controller!.barcodes,
         builder: (context, snapshot) {
@@ -705,7 +788,7 @@ class _BarcodeScannerListViewState
           // log('${barcodes.first.rawValue}');
 
           String barcode = barcodes.first.rawValue.toString();
-          // String barcode = '8901491101813';
+          // String barcode = '5000159461122';
           print(barcode);
 
           controller!.stop();
@@ -834,7 +917,7 @@ class _BarcodeScannerListViewState
             child: Column(
               children: [
                 Expanded(
-                  child: _buildBarcodesListView(),
+                  child: buildBarcodesListView(),
                 ),
               ],
             ),

@@ -7,7 +7,7 @@ import 'package:mivro/presentation/auth/model/personal_details.dart';
 Future<Map<String, dynamic>> healthProfile(
     PersonalDetails personalDetails, String email, String password) async {
   try {
-    const String url = 'http://10.1.6.186:5000/api/v1/user/health-profile';
+    const String url = 'http://192.168.160.94:5000/api/v1/user/health-profile';
 
     var body = {
       'age': personalDetails.age,

@@ -16,7 +16,7 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
       log('in get response');
       _isLoading = true;
       state = [...state];
-      String url = 'http://10.1.6.186:5000/api/v1/ai/savora';
+      String url = 'http://192.168.160.94:5000/api/v1/ai/savora';
 
       Map<String, String> body = {
         "type": "text",
@@ -58,7 +58,7 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
     try {
       _isLoading = true;
       state = [...state];
-      String url = 'http://10.1.6.186:5000/api/v1/ai/savora';
+      String url = 'http://192.168.160.94:5000/api/v1/ai/savora';
 
       const header = <String, String>{
         'Mivro-Email': 'admin@mivro.org',
