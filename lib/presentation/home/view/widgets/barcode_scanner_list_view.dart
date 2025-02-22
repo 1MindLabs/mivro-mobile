@@ -66,8 +66,6 @@ class _BarcodeScannerListViewState
                   );
                 },
               ),
-            
-            
             if (imageString == 'corn-syrup')
               Image.asset(
                 'assets/food-icons/corn.png',
@@ -96,19 +94,18 @@ class _BarcodeScannerListViewState
                   );
                 },
               ),
-            
-            if(imageString != 'peanuts' && imageString != 'corn-syrup' && imageString != 'milk-chocolate')
-              Image.asset('assets/food-icons/$imageString.png', width: 30, height: 30,
-                  errorBuilder: (BuildContext context, Object error,
-                      StackTrace? stackTrace) {
+            if (imageString != 'peanuts' &&
+                imageString != 'corn-syrup' &&
+                imageString != 'milk-chocolate')
+              Image.asset('assets/food-icons/$imageString.png',
+                  width: 30, height: 30, errorBuilder: (BuildContext context,
+                      Object error, StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
                   height: 30,
                 );
               }),
-            
-            
             const SizedBox(width: 8),
             Text(name, style: const TextStyle(fontSize: 14)),
             const Spacer(),
@@ -130,7 +127,7 @@ class _BarcodeScannerListViewState
           children: [
             if (imageString == 'sugars')
               Image.asset(
-                'assets/food-icons/sugar.png',
+                'assets/food-icons/sugars.png',
                 width: 30,
                 height: 30,
                 errorBuilder: (BuildContext context, Object error,
@@ -144,7 +141,7 @@ class _BarcodeScannerListViewState
               ),
             if (imageString == 'carbohydrates')
               Image.asset(
-                'assets/food-icons/carbohydrate.png',
+                'assets/food-icons/carbohydrates.png',
                 width: 30,
                 height: 30,
                 errorBuilder: (BuildContext context, Object error,
@@ -161,19 +158,21 @@ class _BarcodeScannerListViewState
                 'assets/food-icons/protein.png',
                 width: 30,
                 height: 30,
-                errorBuilder: (BuildContext context, Object error,
-                    StackTrace? stackTrace) {
-                  return Image.asset(
-                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
-                    width: 30,
-                    height: 30,
-                  );
-                },
+                // errorBuilder: (BuildContext context, Object error,
+                //     StackTrace? stackTrace) {
+                //   return Image.asset(
+                //     'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                //     width: 30,
+                //     height: 30,
+                //   );
+                // },
               ),
-            if(imageString != 'proteins' && imageString != 'carbohydrates' && imageString != 'sugars')
-              Image.asset('assets/food-icons/$imageString.png', width: 30, height: 30,
-                  errorBuilder: (BuildContext context, Object error,
-                      StackTrace? stackTrace) {
+            if (imageString != 'proteins' &&
+                imageString != 'carbohydrates' &&
+                imageString != 'sugars')
+              Image.asset('assets/food-icons/$imageString.png',
+                  width: 30, height: 30, errorBuilder: (BuildContext context,
+                      Object error, StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
@@ -237,7 +236,7 @@ class _BarcodeScannerListViewState
                     children: [
                       // Powered by OpenFoodFacts + Google Gemini
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Powered by ',
                           style: TextStyle(fontSize: 16, color: Colors.black),
                           children: <TextSpan>[
@@ -258,10 +257,10 @@ class _BarcodeScannerListViewState
                         ),
                       ),
 
-                      SizedBox(height: 20), // Space between sections
+                      const SizedBox(height: 20), // Space between sections
 
                       // Search Section
-                      Text(
+                      const Text(
                         'App\n',
                         style: TextStyle(
                             fontSize: 22,
@@ -785,11 +784,10 @@ class _BarcodeScannerListViewState
           if (barcodes == null || barcodes.isEmpty) {
             return const SizedBox.shrink();
           }
-          // log('${barcodes.first.rawValue}');
 
-          String barcode = barcodes.first.rawValue.toString();
-          // String barcode = '5000159461122';
-          print(barcode);
+          // String barcode = barcodes.first.rawValue.toString();
+          String barcode = '8901719104046';
+          ("Scanned Barcode: $barcode");
 
           controller!.stop();
 
@@ -805,17 +803,54 @@ class _BarcodeScannerListViewState
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return DraggableScrollableSheet(
-                          expand: false,
-                          builder: (context, scrollController) =>
-                              const Center(child: CircularProgressIndicator()));
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
+                        expand: false,
+                        builder: (context, scrollController) =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    // Handle API Errors
+                    else if (snapshot.hasError) {
+                      return DraggableScrollableSheet(
+                        expand: false,
+                        builder: (context, scrollController) => Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              snapshot.error.toString(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Handle Successful Response
+                    else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       var result = snapshot.data!;
                       return details(result);
-                    } else {
+                    }
+
+                    // Handle No Product Found
+                    else {
                       return const Center(
-                        child: Text('No product details found.'),
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "No product details found.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
                     }
                   },
