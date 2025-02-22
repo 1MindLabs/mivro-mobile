@@ -3,7 +3,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScannerErrorWidget extends StatelessWidget {
   const ScannerErrorWidget({super.key, required this.error});
-
   final MobileScannerException error;
 
   @override

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:mivro/presentation/auth/provider/user_details_provider.dart';
 import 'package:mivro/presentation/chat/model/message.dart';
 import 'package:mivro/presentation/chat/provider/chat_history_provider.dart';
 import 'package:mivro/presentation/chat/provider/chat_provider.dart';
@@ -9,6 +10,7 @@ import 'package:mivro/presentation/chat/view/widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mivro/utils/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ChatbotScreen extends ConsumerStatefulWidget {
@@ -34,6 +36,7 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    // Future.microtask(() => extractUsername());
   }
 
   // Start listening to speech and convert it to text
@@ -49,10 +52,18 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
       _speech.listen(
         onResult: (val) => setState(() {
           _recognizedText = val.recognizedWords;
-          _userMessage.text = _recognizedText; // Set recognized text to the input field
+          _userMessage.text =
+              _recognizedText; // Set recognized text to the input field
         }),
       );
     }
+  }
+
+  Future<void> extractUsername() async {
+    AuthState user = ref.watch(authProvider);
+    String username = user.email?.split("@").first ?? "User";
+    log('after extracting username: $username');
+    ref.read(chatHistoryProvider(username).notifier);
   }
 
   // Stop listening to speech
@@ -63,14 +74,18 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
 
   void sendPromptAndGetResponse() async {
     FocusScope.of(context).unfocus();
+    AuthState user = ref.watch(authProvider);
+    String username = user.email?.split("@").first ?? "User";
+    log('username rishi: $username');
     var userPrompt = _userMessage.text;
     _userMessage.clear();
     log('in send prompt');
 
     if (_selectedImage == null) {
       setState(() {
-        ref.read(chatHistoryProvider.notifier).addMessage(
-            Message(text: userPrompt, isUser: true));
+        ref
+            .read(chatHistoryProvider(username).notifier)
+            .addMessage(Message(text: userPrompt, isUser: true));
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.animateTo(
             _scrollController.position.maxScrollExtent,
@@ -89,11 +104,11 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
       log(responseMessage!.text);
       setState(() {
         isFetching = false;
-        ref.read(chatHistoryProvider.notifier).addMessage(responseMessage);
+        ref.read(chatHistoryProvider(username).notifier).addMessage(responseMessage);
       });
     } else {
       setState(() {
-        ref.read(chatHistoryProvider.notifier).addMessage(
+        ref.read(chatHistoryProvider(username).notifier).addMessage(
               Message(text: userPrompt, isUser: true, image: _selectedImage),
             );
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -111,7 +126,7 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
       log(responseMessage!.text);
       setState(() {
         _selectedImage = null;
-        ref.read(chatHistoryProvider.notifier).addMessage(responseMessage);
+        ref.read(chatHistoryProvider(username).notifier).addMessage(responseMessage);
       });
     }
 
@@ -136,7 +151,12 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(chatsProvider.notifier).isLoading;
-    List<Message> messages = ref.watch(chatHistoryProvider);
+
+    AuthState user = ref.watch(authProvider);
+    String username = user.email?.split("@").first ?? "User";
+    log('after extracting username: $username');
+
+    List<Message> messages = ref.watch(chatHistoryProvider(username));
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -237,7 +257,8 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
                         ],
                       ),
                       IconButton(
-                        onPressed: _isListening ? _stopListening : _startListening,
+                        onPressed:
+                            _isListening ? _stopListening : _startListening,
                         icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
                       ),
                       IconButton(

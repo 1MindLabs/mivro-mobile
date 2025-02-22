@@ -1,19 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mivro/utils/api_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsNotifier extends StateNotifier<Map<String, dynamic>> {
   ProductDetailsNotifier() : super({});
 
   Future<Map<String, dynamic>> getProductDetails(String barcode) async {
     try {
-      const String url = 'http://10.1.6.186:5000/api/v1/search/barcode';
+      const String url = '${ApiConstants.baseUrl}/api/v1/search/barcode';
 
-      const header = <String, String>{
-        'Mivro-Email': 'admin@mivro.org',
-        'Mivro-Password': 'admin@123',
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String email = prefs.getString('email') ?? '';
+      String password = prefs.getString('password') ?? '';
+
+      final header = <String, String>{
+        'Mivro-Email': email,
+        'Mivro-Password': password,
         'Content-Type': 'application/json',
       };
 
@@ -27,17 +32,32 @@ class ProductDetailsNotifier extends StateNotifier<Map<String, dynamic>> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data =
             json.decode(response.body) as Map<String, dynamic>;
-        log(data.toString());
+        
+        log('Success: $data');
         state = data;
-
         return data;
-      } else {
+      }
+      
+      // Handle 404 Not Found
+      else if (response.statusCode == 404) {
+        log('Error 404: Product not found.');
+        throw Exception("Product not found.");
+      }
+      
+      // Handle 500 Internal Server Error
+      else if (response.statusCode == 500) {
+        log('Error 500: Server error.');
+        throw Exception(response.body);
+      }
+      
+      // Handle any other error
+      else {
         log('Error: ${response.body} with status code: ${response.statusCode}');
-        return {};
+        throw Exception("Unexpected error occurred.");
       }
     } catch (e) {
-      log(e.toString());
-      return {};
+      log('Exception: $e');
+      throw Exception("Network error: Please check your connection.");
     }
   }
 

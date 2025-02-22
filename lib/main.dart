@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     log(isLoggedIn.toString());
     log(isUser.toString());
 
-    if (isLoggedIn ) {
+    if (isLoggedIn) {
       return const HomePage();
     } else if (isUser) {
       return const LoginScreen();

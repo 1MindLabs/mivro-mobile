@@ -2,15 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:mivro/utils/api_constants.dart';
 
 Future<bool> signin(String email, String password) async {
   try {
-    const String url = 'http://10.1.6.186:5000/api/v1/auth/signin';
+    const String url = '${ApiConstants.baseUrl}/api/v1/auth/signin';
 
     var body = {
-        'email': email,
-        'password': password,
-      };
+      'email': email,
+      'password': password,
+    };
 
     final response = await http.post(
       Uri.parse(url),

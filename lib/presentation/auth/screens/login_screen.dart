@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:mivro/constants.dart';
 import 'package:mivro/presentation/auth/api/sign_in.dart';
+import 'package:mivro/presentation/auth/provider/user_details_provider.dart';
 import 'package:mivro/presentation/auth/screens/signup_screen.dart';
 import 'package:mivro/presentation/home/view/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,22 +28,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           _passwordController.text.isNotEmpty) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _emailController.text);
-          prefs.setString('password', _passwordController.text);
+        prefs.setString('password', _passwordController.text);
 
-         var response = await signin(_emailController.text, _passwordController.text);
-          if(response){
-            prefs.setBool('isLoggedIn', true);
+        ref
+            .read(authProvider.notifier)
+            .updateCredentials(_emailController.text, _passwordController.text);
+
+        var response =
+            await signin(_emailController.text, _passwordController.text);
+        if (response) {
+          prefs.setBool('isLoggedIn', true);
           prefs.setBool('isUser', true);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Login successfull'),
+              content: Text('Login Successfull'),
               backgroundColor: Colors.green,
             ),
           );
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomePage()));
-          }
-        else {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Invalid Credentials'),
@@ -157,7 +162,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, color: Colors.blue),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
                           )),
                     ),
                     const Gap(25),

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:mivro/presentation/auth/provider/user_details_provider.dart';
 import 'package:mivro/presentation/chat/model/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +13,9 @@ class ChatItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var width = MediaQuery.of(context).size.width;
+    AuthState user = ref.watch(authProvider);
+    String username = user.email?.split("@").first ?? "User";
+    log(username);
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -62,7 +68,7 @@ class ChatItem extends ConsumerWidget {
                 ],
               ),
             )
-          : message.text == 'Hello @areeb! How can I help you?'
+          : message.text == 'Hello @$username! How can I help you?'
               ? Align(
                   alignment: Alignment.centerLeft,
                   child: Container(

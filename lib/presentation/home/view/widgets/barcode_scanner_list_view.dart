@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,19 +52,60 @@ class _BarcodeScannerListViewState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/food-icons/$imageString.png',
-              width: 30,
-              height: 30,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
+            if (imageString == 'milk-chocolate')
+              Image.asset(
+                'assets/food-icons/chocolate.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'corn-syrup')
+              Image.asset(
+                'assets/food-icons/corn.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'peanuts')
+              Image.asset(
+                'assets/food-icons/nuts.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString != 'peanuts' &&
+                imageString != 'corn-syrup' &&
+                imageString != 'milk-chocolate')
+              Image.asset('assets/food-icons/$imageString.png',
+                  width: 30, height: 30, errorBuilder: (BuildContext context,
+                      Object error, StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
                   height: 30,
                 );
-              },
-            ),
+              }),
             const SizedBox(width: 8),
             Text(name, style: const TextStyle(fontSize: 14)),
             const Spacer(),
@@ -85,19 +125,60 @@ class _BarcodeScannerListViewState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/food-icons/$imageString.png',
-              width: 30,
-              height: 30,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
+            if (imageString == 'sugars')
+              Image.asset(
+                'assets/food-icons/sugars.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'carbohydrates')
+              Image.asset(
+                'assets/food-icons/carbohydrates.png',
+                width: 30,
+                height: 30,
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                    width: 30,
+                    height: 30,
+                  );
+                },
+              ),
+            if (imageString == 'proteins')
+              Image.asset(
+                'assets/food-icons/protein.png',
+                width: 30,
+                height: 30,
+                // errorBuilder: (BuildContext context, Object error,
+                //     StackTrace? stackTrace) {
+                //   return Image.asset(
+                //     'assets/food-icons/no-image.png', // Fallback image when asset is not found
+                //     width: 30,
+                //     height: 30,
+                //   );
+                // },
+              ),
+            if (imageString != 'proteins' &&
+                imageString != 'carbohydrates' &&
+                imageString != 'sugars')
+              Image.asset('assets/food-icons/$imageString.png',
+                  width: 30, height: 30, errorBuilder: (BuildContext context,
+                      Object error, StackTrace? stackTrace) {
                 return Image.asset(
                   'assets/food-icons/no-image.png', // Fallback image when asset is not found
                   width: 30,
                   height: 30,
                 );
-              },
-            ),
+              }),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,8 +221,6 @@ class _BarcodeScannerListViewState
                   Row(
                     children: [
                       const Spacer(),
-                      
-                      
                       IconButton(
                         icon: const Icon(Icons.close),
                         iconSize: 20,
@@ -152,17 +231,14 @@ class _BarcodeScannerListViewState
                       ),
                     ],
                   ),
-                  
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Powered by OpenFoodFacts + Google Gemini
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Powered by ',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black), // default text style
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'OpenFoodFacts',
@@ -181,10 +257,10 @@ class _BarcodeScannerListViewState
                         ),
                       ),
 
-                      SizedBox(height: 20), // Space between sections
+                      const SizedBox(height: 20), // Space between sections
 
                       // Search Section
-                      Text(
+                      const Text(
                         'App\n',
                         style: TextStyle(
                             fontSize: 22,
@@ -250,14 +326,14 @@ class _BarcodeScannerListViewState
                       SizedBox(height: 20), // Space between sections
 
                       // Warning Section
-                      Text(
+                      const Text(
                         'Warning\n',
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
+                      const Text(
                         'The information provided is for general guidance only and should not be considered medical advice. Always seek professional advice for important health decisions.',
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
@@ -265,11 +341,11 @@ class _BarcodeScannerListViewState
                       SizedBox(height: 20), // Space between sections
 
                       // Footer
-                      Text(
+                      const Text(
                         '© 2024 Areeb Ahmed, Shivansh Karan, Shashwat Kumar, Rishi Chirchi. All rights reserved.',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
-                      Text(
+                      const Text(
                         'License - Documentation',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
@@ -699,7 +775,7 @@ class _BarcodeScannerListViewState
       );
     }
 
-    Widget _buildBarcodesListView() {
+    Widget buildBarcodesListView() {
       return StreamBuilder<BarcodeCapture>(
         stream: controller!.barcodes,
         builder: (context, snapshot) {
@@ -708,11 +784,10 @@ class _BarcodeScannerListViewState
           if (barcodes == null || barcodes.isEmpty) {
             return const SizedBox.shrink();
           }
-          // log('${barcodes.first.rawValue}');
 
-          String barcode = barcodes.first.rawValue.toString();
-          // String barcode = '8901491101813';
-          print(barcode);
+          // String barcode = barcodes.first.rawValue.toString();
+          String barcode = '8901719104046';
+          ("Scanned Barcode: $barcode");
 
           controller!.stop();
 
@@ -728,17 +803,54 @@ class _BarcodeScannerListViewState
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return DraggableScrollableSheet(
-                          expand: false,
-                          builder: (context, scrollController) =>
-                              const Center(child: CircularProgressIndicator()));
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
+                        expand: false,
+                        builder: (context, scrollController) =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    // Handle API Errors
+                    else if (snapshot.hasError) {
+                      return DraggableScrollableSheet(
+                        expand: false,
+                        builder: (context, scrollController) => Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              snapshot.error.toString(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Handle Successful Response
+                    else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       var result = snapshot.data!;
                       return details(result);
-                    } else {
+                    }
+
+                    // Handle No Product Found
+                    else {
                       return const Center(
-                        child: Text('No product details found.'),
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "No product details found.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
                     }
                   },
@@ -840,7 +952,7 @@ class _BarcodeScannerListViewState
             child: Column(
               children: [
                 Expanded(
-                  child: _buildBarcodesListView(),
+                  child: buildBarcodesListView(),
                 ),
               ],
             ),

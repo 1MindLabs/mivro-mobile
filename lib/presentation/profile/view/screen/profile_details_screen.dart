@@ -72,7 +72,8 @@ class ProfileDetailsScreen extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.medical_services),
                   title: const Text('Medical Condition'),
-                  subtitle: Text(personalDetails['medical_conditions'].toString()),
+                  subtitle:
+                      Text(personalDetails['medical_conditions'].toString()),
                 ),
                 ListTile(
                   leading: const Icon(Icons.warning),
@@ -82,7 +83,8 @@ class ProfileDetailsScreen extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.restaurant_menu),
                   title: const Text('Dietary Preference'),
-                  subtitle: Text(personalDetails['dietaryPreferences'].toString()),
+                  subtitle:
+                      Text(personalDetails['dietaryPreferences'].toString()),
                 ),
               ],
             ),

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:mivro/utils/hexcolor.dart';
@@ -26,8 +24,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   // Start listening to speech and convert it to text
   Future<void> _startListening() async {
     bool available = await _speech.initialize(
-      onStatus: (status) => log('Status: $status'),
-      onError: (error) => log('Error: $error'),
+      onStatus: (status) => print('Status: $status'),
+      onError: (error) => print('Error: $error'),
     );
     if (available) {
       setState(() {
@@ -36,7 +34,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       _speech.listen(
         onResult: (val) => setState(() {
           _recognizedText = val.recognizedWords;
-          searchMessage.text = _recognizedText; // Set recognized text to the input field
+          searchMessage.text = _recognizedText;
         }),
       );
     }
@@ -53,8 +51,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        color: myColorFromHex('#EEF1FF'), // Background color
-        borderRadius: BorderRadius.circular(30.0), // Rounded corners
+        color: myColorFromHex('#EEF1FF'),
+        borderRadius: BorderRadius.circular(30.0),
       ),
       child: Padding(
         padding: const EdgeInsets.all(2.0),

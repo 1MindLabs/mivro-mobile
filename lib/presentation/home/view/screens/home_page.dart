@@ -20,15 +20,14 @@ class _HomePageState extends State<HomePage> {
     const ChatbotScreen(),
     const MarketplaceScreen(),
     const BarcodeScannerScreen(),
-
-    const OverviewScreen(),
+     TrackerScreen(),
     const ProfileScreen(),
   ];
 
   @override
   initState() {
     super.initState();
-  }  
+  }
 
   @override
   Widget build(BuildContext context) {
