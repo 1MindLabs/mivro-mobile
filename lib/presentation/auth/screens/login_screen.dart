@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:mivro/constants.dart';
 import 'package:mivro/presentation/auth/api/sign_in.dart';
+import 'package:mivro/presentation/auth/provider/user_details_provider.dart';
 import 'package:mivro/presentation/auth/screens/signup_screen.dart';
 import 'package:mivro/presentation/home/view/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _emailController.text);
         prefs.setString('password', _passwordController.text);
+
+        ref
+            .read(authProvider.notifier)
+            .updateCredentials(_emailController.text, _passwordController.text);
 
         var response =
             await signin(_emailController.text, _passwordController.text);

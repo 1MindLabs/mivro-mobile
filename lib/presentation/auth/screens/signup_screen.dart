@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mivro/constants.dart';
 import 'package:mivro/presentation/auth/api/create_account.dart';
 import 'package:mivro/presentation/auth/model/personal_details.dart';
+import 'package:mivro/presentation/auth/provider/user_details_provider.dart';
 import 'package:mivro/presentation/auth/screens/details_screen.dart';
 import 'package:mivro/presentation/auth/screens/login_screen.dart';
 import 'package:mivro/presentation/home/view/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -31,6 +33,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('email', _emailController.text);
           prefs.setString('password', _passwordController.text);
+
+          ref
+            .read(authProvider.notifier)
+            .updateCredentials(_emailController.text, _passwordController.text);
 
           var response = await createAccount(
               _emailController.text, _passwordController.text);
