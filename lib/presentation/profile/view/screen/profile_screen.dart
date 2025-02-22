@@ -16,29 +16,46 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String email = '';
+  String username = '';
   String password = '';
-  Map<String, dynamic> profileDetails = {};
+  Map<String, dynamic>? profileDetails;
+  bool isLoading = true; // Add a loading state
+
   @override
   void initState() {
-    getEmailAndPassword();
     super.initState();
+    getEmailAndPassword();
   }
 
-  void getEmailAndPassword() async {
+  Future<void> getEmailAndPassword() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      email = prefs.getString('email') ?? '';
+      String email = prefs.getString('email') ?? '';
+      username = email.split('@').first;
       password = prefs.getString('password') ?? '';
       profileDetails = await loadProfile(email, password);
-      setState(() {});
+
+      setState(() {
+        isLoading = false; // Data loaded
+      });
     } catch (e) {
       log(e.toString());
+      setState(() {
+        isLoading = false; // Stop loading even if an error occurs
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator()); // Show loader
+    }
+
+    if (profileDetails == null || profileDetails!.isEmpty) {
+      return const Center(child: Text("Failed to load profile"));
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -48,31 +65,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => ProfileDetailsScreen(
-                    personalDetails: profileDetails['health_profile'] ?? {}),
+                  personalDetails: profileDetails!['health_profile'] ?? {},
+                ),
               ),
             );
           },
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.all(30),
+            padding: const EdgeInsets.all(30),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(
-                      profileDetails['account_info']['photo_url'] ?? ''),
+                  backgroundImage: profileDetails!['account_info']['photo_url'] != null
+                      ? NetworkImage(profileDetails!['account_info']['photo_url'])
+                      : null,
+                  child: profileDetails!['account_info']['photo_url'] == null
+                      ? const Icon(Icons.person, size: 40) // Placeholder icon
+                      : null,
                 ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      profileDetails['account_info']['display_name'] ?? '',
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                      profileDetails!['account_info']['display_name'] ?? 'Unknown',
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      email,
+                      username,
                       style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ],
@@ -81,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-        Divider(),
+        const Divider(),
         _buildMenuItem(context, 'Account Settings'),
         _buildMenuItem(context, 'Privacy and Security'),
         _buildMenuItem(context, 'Activity and Records'),
@@ -89,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _buildMenuItem(context, 'Support and Feedback'),
         _buildMenuItem(context, 'Legal'),
         _buildMenuItem(context, 'Advanced'),
-        Spacer(),
+        const Spacer(),
         Center(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 30),
@@ -98,14 +119,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setBool('isLoggedIn', false);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-                padding: EdgeInsets.symmetric(horizontal: 150, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -124,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildMenuItem(BuildContext context, String title) {
     return ListTile(
       title: Text(title),
-      trailing: Icon(Icons.arrow_forward_ios),
+      trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {},
     );
   }
