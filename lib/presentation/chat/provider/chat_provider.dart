@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:mivro/presentation/chat/model/message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:mivro/utils/api_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatsNotifier extends StateNotifier<List<dynamic>> {
   ChatsNotifier() : super([]);
@@ -16,16 +18,20 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
       log('in get response');
       _isLoading = true;
       state = [...state];
-      String url = 'http://192.168.160.94:5000/api/v1/ai/savora';
+      String url = '${ApiConstants.baseUrl}/api/v1/ai/savora';
 
       Map<String, String> body = {
         "type": "text",
         "message": prompt,
       };
 
-      const header = <String, String>{
-        'Mivro-Email': 'admin@mivro.org',
-        'Mivro-Password': 'admin@123',
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String email = prefs.getString('email') ?? '';
+      String password = prefs.getString('password') ?? '';
+
+      final header = <String, String>{
+        'Mivro-Email': email,
+        'Mivro-Password': password,
         'Content-Type': 'application/json',
       };
 
@@ -58,11 +64,15 @@ class ChatsNotifier extends StateNotifier<List<dynamic>> {
     try {
       _isLoading = true;
       state = [...state];
-      String url = 'http://192.168.160.94:5000/api/v1/ai/savora';
+      String url = '${ApiConstants.baseUrl}/api/v1/ai/savora';
 
-      const header = <String, String>{
-        'Mivro-Email': 'admin@mivro.org',
-        'Mivro-Password': 'admin@123',
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String email = prefs.getString('email') ?? '';
+      String password = prefs.getString('password') ?? '';
+
+      final header = <String, String>{
+        'Mivro-Email': email,
+        'Mivro-Password': password,
         'Content-Type': 'multipart/form-data',
       };
 
