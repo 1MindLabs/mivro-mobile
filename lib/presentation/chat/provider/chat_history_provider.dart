@@ -2,10 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mivro/presentation/chat/model/message.dart';
 
 class ChatHistoryNotifier extends StateNotifier<List<Message>> {
-  ChatHistoryNotifier()
+  ChatHistoryNotifier(String username)
       : super([
-          const Message(
-              text: 'Hello @areeb! How can I help you?', isUser: false)
+          Message(text: 'Hello @$username! How can I help you?', isUser: false)
         ]);
 
   void addMessage(Message message) {
@@ -13,6 +12,7 @@ class ChatHistoryNotifier extends StateNotifier<List<Message>> {
   }
 }
 
-final chatHistoryProvider =
-    StateNotifierProvider<ChatHistoryNotifier, List<Message>>(
-        (ref) => ChatHistoryNotifier());
+// Chat history provider that requires a username
+final chatHistoryProvider = StateNotifierProvider.family<ChatHistoryNotifier, List<Message>, String>(
+  (ref, username) => ChatHistoryNotifier(username),
+);
