@@ -36,7 +36,7 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    // Future.microtask(() => extractUsername());
+    Future.microtask(() => extractUsername());
   }
 
   // Start listening to speech and convert it to text
@@ -60,8 +60,15 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
   }
 
   Future<void> extractUsername() async {
-    AuthState user = ref.watch(authProvider);
-    String username = user.email?.split("@").first ?? "User";
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email') ?? 'areeb@gmail.com';
+    log('email: $email');
+    String? password = prefs.getString('password')?? 'test@1';
+    log('password: $password');
+
+    ref.read(authProvider.notifier).updateCredentials(email, password);
+    String username = email?.split("@").first ?? "User";
     log('after extracting username: $username');
     ref.read(chatHistoryProvider(username).notifier);
   }

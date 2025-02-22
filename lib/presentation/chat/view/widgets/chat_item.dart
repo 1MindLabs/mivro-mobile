@@ -14,6 +14,7 @@ class ChatItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var width = MediaQuery.of(context).size.width;
     AuthState user = ref.watch(authProvider);
+    log("Email: ${user.email}");
     String username = user.email?.split("@").first ?? "User";
     log(username);
 
