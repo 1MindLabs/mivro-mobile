@@ -9,6 +9,7 @@ import 'package:mivro/presentation/home/view/widgets/scanner_error_widget.dart';
 import 'package:mivro/presentation/home/view/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BarcodeScannerListView extends ConsumerStatefulWidget {
   const BarcodeScannerListView({super.key});
@@ -205,6 +206,13 @@ class _BarcodeScannerListViewState
       );
     }
 
+    Future<void> _launchUrl(String url) async {
+      final Uri uri = Uri.parse(url);
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $url');
+      }
+    }
+
     Widget devDetails(Map<String, dynamic> result) {
       return DraggableScrollableSheet(
         expand: false,
@@ -323,7 +331,7 @@ class _BarcodeScannerListViewState
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
 
-                      SizedBox(height: 20), // Space between sections
+                      const SizedBox(height: 20), // Space between sections
 
                       // Warning Section
                       const Text(
@@ -338,17 +346,41 @@ class _BarcodeScannerListViewState
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
 
-                      SizedBox(height: 20), // Space between sections
-
-                      // Footer
+                      const SizedBox(height: 20),
                       const Text(
-                        '© 2024 Areeb Ahmed, Shivansh Karan, Shashwat Kumar, Rishi Chirchi. All rights reserved.',
+                        '© 2024 Areeb Ahmed, Shivansh Karan, Rishi Chirchi. All rights reserved.',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
-                      const Text(
-                        'License - Documentation',
-                        style: TextStyle(fontSize: 12, color: Colors.black),
-                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () => _launchUrl(
+                                'https://github.com/1MindLabs/mivro-docs/blob/main/LICENSE'),
+                            child: const Text(
+                              'License',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                          // const Text(' - '),
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () => _launchUrl(
+                                'https://github.com/1MindLabs/mivro-docs/blob/main/README.md'),
+                            child: const Text(
+                              'License',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   )
                 ],
