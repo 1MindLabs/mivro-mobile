@@ -1,26 +1,14 @@
-import 'dart:developer';
-
-import 'package:mivro/presentation/auth/screens/details_screen.dart';
-import 'package:mivro/presentation/auth/screens/login_screen.dart';
-import 'package:mivro/presentation/auth/screens/signup_screen.dart';
-import 'package:mivro/presentation/home/view/screens/home_page.dart';
-import 'package:mivro/utils/hexcolor.dart';
+import 'package:mivro/features/auth/screens/signin_screen.dart';
+import 'package:mivro/features/auth/screens/signup_screen.dart';
+import 'package:mivro/features/home/screens/home_screen.dart';
+import 'package:mivro/core/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // FlutterNativeSplash.remove();
-
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -31,57 +19,68 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Widget> _screenFuture;
+  Widget _initialScreen = const SignUpScreen();
 
   @override
   void initState() {
     super.initState();
-    _screenFuture = checkLogin();
+    _checkAuth();
   }
 
-  Future<Widget> checkLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    bool isUser = prefs.getBool('isUser') ?? false;
-    log(isLoggedIn.toString());
-    log(isUser.toString());
+  Future<void> _checkAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final hasAccount = prefs.getBool('hasAccount') ?? false;
 
-    if (isLoggedIn) {
-      return const HomePage();
-    } else if (isUser) {
-      return const LoginScreen();
-    } else {
-      return const SignUpScreen();
-    }
+    setState(() {
+      if (isLoggedIn) {
+        _initialScreen = const HomeScreen();
+      } else if (hasAccount) {
+        _initialScreen = const SignInScreen();
+      } else {
+        _initialScreen = const SignUpScreen();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: theme,
-      home: FutureBuilder<Widget>(
-        future: _screenFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return const Center(child: Text('Error loading screen'));
-          }
-          return snapshot.data!;
-        },
+      theme: _buildTheme(),
+      home: _initialScreen,
+    );
+  }
+
+  ThemeData _buildTheme() {
+    return ThemeData.light().copyWith(
+      textTheme: GoogleFonts.poppinsTextTheme(),
+      scaffoldBackgroundColor: Colors.white,
+      primaryColor: mivroGreen,
+      colorScheme: const ColorScheme.light(
+        primary: mivroGreen,
+        secondary: mivroGreenDark,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: mivroGreen,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: mivroGreen,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: mivroGray,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 }
-
-final theme = ThemeData.light().copyWith(
-  textTheme: GoogleFonts.poppinsTextTheme(),
-  scaffoldBackgroundColor: Colors.white,
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: myColorFromHex("#134B70"),
-    selectedItemColor: Colors.white,
-    unselectedItemColor: Colors.white,
-  ),
-);

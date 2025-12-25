@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:mivro/core/hex_color.dart';
+import 'package:mivro/features/home/providers/product_search_provider.dart';
+
+class ProductSearchWidget extends ConsumerStatefulWidget {
+  const ProductSearchWidget({super.key});
+
+  @override
+  ConsumerState<ProductSearchWidget> createState() =>
+      _ProductSearchWidgetState();
+}
+
+class _ProductSearchWidgetState extends ConsumerState<ProductSearchWidget> {
+  TextEditingController searchMessage = TextEditingController();
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _recognizedText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+  Future<void> _startListening() async {
+    bool available = await _speech.initialize(
+      onStatus: (status) {},
+      onError: (error) {},
+    );
+    if (available) {
+      setState(() {
+        _isListening = true;
+      });
+      _speech.listen(
+        onResult: (val) => setState(() {
+          _recognizedText = val.recognizedWords;
+          searchMessage.text = _recognizedText;
+        }),
+      );
+    }
+  }
+
+  void _stopListening() {
+    setState(() => _isListening = false);
+    _speech.stop();
+  }
+
+  void _handleSearch() {
+    final query = searchMessage.text.trim();
+    if (query.isNotEmpty) {
+      ref.read(productSearchProvider.notifier).searchProducts(query);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: myColorFromHex('#EEF1FF'),
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Row(
+          children: [
+            const Image(
+              image: AssetImage('assets/icons/misc/search.png'),
+              height: 20,
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  filled: true,
+                  fillColor: myColorFromHex('#EEF1FF'),
+                  border: InputBorder.none,
+                ),
+                keyboardType: TextInputType.text,
+                controller: searchMessage,
+                onFieldSubmitted: (_) => _handleSearch(),
+              ),
+            ),
+            IconButton(
+              onPressed: _isListening ? _stopListening : _startListening,
+              icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
